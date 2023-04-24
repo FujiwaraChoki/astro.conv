@@ -9,4 +9,12 @@ body {
   background-color: #040221;
   font-family: 'DM Sans', sans-serif;
   color: #bcbad1;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }

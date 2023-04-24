@@ -1,6 +1,13 @@
+import Navbar from '@/components/Header/Navbar';
+
 const Home = () => {
   return (
-    <div></div>
+    <div>
+      <Navbar />
+      <div className="flex flex-col items-center justify-center h-screen">
+        Hi
+      </div>
+    </div>
   );
 };
 
