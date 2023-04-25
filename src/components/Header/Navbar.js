@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import NavLink from "./NavLink";
 
 const Navbar = () => {
@@ -20,9 +22,9 @@ const Navbar = () => {
                             <NavLink href="/about" text="About" />
                         </ul>
                     </div>
-                    <button className="transition p-3 ease-in-out delay-150 bg-indigo-500 font-medium text-white text-xl rounded-lg hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300">
+                    <Link href="/pro" className="transition p-3 ease-in-out delay-150 bg-indigo-500 font-medium text-white text-xl rounded-lg hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300">
                         Go Pro
-                    </button>
+                    </Link>
                 </div>
             </nav>
         </div>
