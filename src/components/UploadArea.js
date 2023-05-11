@@ -3,14 +3,20 @@ import Lottie from "react-lottie";
 
 import FileTypeChooser from '@/components/FileTypeChooser';
 import dragndrop from "../../public/dragndrop.json";
+import FileContext from "@/contexts/FileContext";
+import FileDataContext from "@/contexts/FileDataContext";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/router";
 
 const UploadArea = () => {
-    const [file, setFile] = useState(null);
     const [resultFileType, setResultFileType] = useState("");
     const [conversionsLeft, setConversionsLeft] = useState(0);
+    const { fileData, setFileData } = useContext(FileDataContext);
     const [open, setOpen] = useState(false);
+    const { file, setFile } = useContext(FileContext);
+
+    const router = useRouter();
 
     const defaultOptions = {
         loop: true,
@@ -24,12 +30,24 @@ const UploadArea = () => {
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
-        // Update file state or perform any necessary actions with the selected file
+
+        // Set File Data
+        const reader = new FileReader();
+        reader.readAsDataURL(selectedFile);
+        reader.onload = (e) => {
+            setFileData(e.target.result);
+        };
     };
 
     useEffect(() => {
         console.log(file);
     }, [file]);
+
+    useEffect(() => {
+        if (file && fileData && resultFileType) {
+            router.push(`/convert?type=${resultFileType}`);
+        }
+    }, [resultFileType]);
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
