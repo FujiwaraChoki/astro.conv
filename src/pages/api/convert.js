@@ -49,7 +49,7 @@ const handler = async (req, res) => {
     console.log("Result file: ");
 
     console.log(blob);
-    return res.sendFile(blob);
+    return res.status(200).send(blob);
 };
 
 export default handler;
