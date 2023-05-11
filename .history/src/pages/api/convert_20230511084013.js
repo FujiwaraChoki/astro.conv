@@ -1,11 +1,18 @@
 import CloudConvert from 'cloudconvert';
 import { v4 as uuidv4 } from "uuid";
+import fs from 'fs';
+
+const writeToFile = (filename, data) => {
+    fs.writeFile(filename, data, (err) => {
+        if (err) throw err;
+        console.log('The file has been saved!');
+    });
+}
 
 const handler = async (req, res) => {
     if (req.method !== 'POST') {
         return res.status(405).send('Method not allowed');
     }
-
     const { name, data, type } = req.body;
 
     console.log("Name: " + name);
@@ -44,12 +51,14 @@ const handler = async (req, res) => {
         (task) => task.operation === 'export/url'
     )[0];
 
-    const { blob } = exportTask.result.files[0];
+    const { url } = exportTask.result.files[0];
 
     console.log("Result file: ");
+    console.log(url);
 
-    console.log(blob);
-    return res.sendFile(blob);
+    writeToFile(`./public/${id}.${type}`, url);
+
+    res.status(200).json({ url: url });
 };
 
 export default handler;

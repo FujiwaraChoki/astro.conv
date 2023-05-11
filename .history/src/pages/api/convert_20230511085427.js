@@ -5,7 +5,6 @@ const handler = async (req, res) => {
     if (req.method !== 'POST') {
         return res.status(405).send('Method not allowed');
     }
-
     const { name, data, type } = req.body;
 
     console.log("Name: " + name);

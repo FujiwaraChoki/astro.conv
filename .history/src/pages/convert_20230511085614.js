@@ -29,7 +29,7 @@ const ConvertPage = () => {
                 data: fileData,
             };
 
-            fetch(`http://localhost:3000/api/convert`, {
+            fetch(`/api/convert`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

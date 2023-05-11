@@ -5,7 +5,6 @@ const handler = async (req, res) => {
     if (req.method !== 'POST') {
         return res.status(405).send('Method not allowed');
     }
-
     const { name, data, type } = req.body;
 
     console.log("Name: " + name);
@@ -44,12 +43,12 @@ const handler = async (req, res) => {
         (task) => task.operation === 'export/url'
     )[0];
 
-    const { blob } = exportTask.result.files[0];
+    const { url } = exportTask.result.files[0];
 
     console.log("Result file: ");
 
-    console.log(blob);
-    return res.sendFile(blob);
+    // Return blob¨
+    res.send({ url });
 };
 
 export default handler;
