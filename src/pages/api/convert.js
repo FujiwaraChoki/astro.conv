@@ -1,5 +1,5 @@
-import CloudConvert from 'cloudconvert';
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
+import { ConvertApi } from 'convertapi';
 
 const handler = async (req, res) => {
     if (req.method !== 'POST') {
@@ -8,48 +8,33 @@ const handler = async (req, res) => {
 
     const { name, data, type } = req.body;
 
-    console.log("Name: " + name);
-    console.log("Data: " + data);
-    console.log("Type: " + type);
+    console.log('Name: ' + name);
+    console.log('Data: ' + data);
+    console.log('Type: ' + type);
 
     const inputFormat = name.split('.').pop();
 
     const id = uuidv4();
 
-    const cloudConvert = new CloudConvert(process.env.API_KEY);
+    console.log('API KEY: ', process.env.API_KEY);
 
-    let job = await cloudConvert.jobs.create({
-        tasks: {
-            'import-my-file': {
-                operation: 'import/upload',
-                data,
-            },
-            'convert-my-file': {
-                operation: 'convert',
-                input_format: inputFormat,
-                output_format: type,
-                input: ['import-my-file'],
-                filename: `${id}.${type}`,
-            },
-            'export-my-file': {
-                operation: 'export/url',
-                input: ['convert-my-file'],
-            },
-        },
+    const convertApi = new ConvertApi(process.env.API_KEY);
+
+    const inputFile = await convertApi.upload(data, name);
+
+    const conversion = await convertApi.convert(type, {
+        File: inputFile,
+        FileName: `${id}.${type}`,
     });
 
-    job = await cloudConvert.jobs.wait(job.id);
+    const result = await conversion.saveFiles();
 
-    const exportTask = job.tasks.filter(
-        (task) => task.operation === 'export/url'
-    )[0];
+    const url = result.files[0].Url;
 
-    const { blob } = exportTask.result.files[0];
+    console.log('Result file: ');
+    console.log(url);
 
-    console.log("Result file: ");
-
-    console.log(blob);
-    return res.status(200).send(blob);
+    return res.status(200).send(url);
 };
 
 export default handler;

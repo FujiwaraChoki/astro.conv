@@ -29,7 +29,10 @@ const ConvertPage = () => {
                 data: fileData,
             };
 
-            fetch(`http://localhost:3000/api/convert`, {
+            // http://localhost:3000
+            //https://fujiwarachoki-improved-journey-jgqp9j9xxvr25xv6-3000.preview.app.github.dev
+
+            fetch(`/api/convert`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
