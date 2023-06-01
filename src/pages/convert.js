@@ -24,7 +24,7 @@ const ConvertPage = () => {
     useEffect(() => {
         if (file && fileData) {
             const formData = {
-                name: file.name,
+                name: file?.name,
                 type: fileType,
                 data: fileData,
             };
