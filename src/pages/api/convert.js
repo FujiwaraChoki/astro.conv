@@ -1,5 +1,17 @@
-import { v4 as uuidv4 } from 'uuid';
-import { ConvertApi } from 'convertapi';
+const ConvertApi = require('convertapi');
+
+const convertFile = async (data, type) => {
+    // Set up ConvertApi client
+    const convertApi = new ConvertApi(process.env.API_KEY);
+
+    // Convert the file
+    const conversion = await convertApi.convert(type, { File: data });
+
+    // Retrieve the converted file
+    const convertedFile = await conversion.file.save();
+
+    return convertedFile;
+};
 
 const handler = async (req, res) => {
     if (req.method !== 'POST') {
@@ -8,33 +20,33 @@ const handler = async (req, res) => {
 
     const { name, data, type } = req.body;
 
-    console.log('Name: ' + name);
-    console.log('Data: ' + data);
-    console.log('Type: ' + type);
+    try {
+        // Convert the file to the desired type
+        const convertedFile = await convertFile(data, type);
 
-    const inputFormat = name.split('.').pop();
+        // Create a blob from the converted file
+        const blob = new Blob([convertedFile], { type: `image/${type}` });
 
-    const id = uuidv4();
+        // Set the file name
+        const fileName = `${name}.${type}`;
 
-    console.log('API KEY: ', process.env.API_KEY);
+        // Set the headers
+        res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+        res.setHeader('Content-Type', `image/${type}`);
 
-    const convertApi = new ConvertApi(process.env.API_KEY);
+        return res.status(200).send(blob);
+    } catch (error) {
+        console.error('File conversion error:', error);
+        return res.status(500).send('File conversion error');
+    }
+};
 
-    const inputFile = await convertApi.upload(data, name);
-
-    const conversion = await convertApi.convert(type, {
-        File: inputFile,
-        FileName: `${id}.${type}`,
-    });
-
-    const result = await conversion.saveFiles();
-
-    const url = result.files[0].Url;
-
-    console.log('Result file: ');
-    console.log(url);
-
-    return res.status(200).send(url);
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: '1000mb'
+        }
+    }
 };
 
 export default handler;
