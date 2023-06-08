@@ -10,6 +10,7 @@ const ConvertPage = () => {
     const [loading, setLoading] = useState(true);
     const [resultFile, setResultFile] = useState(null);
     const [newFileName, setNewFileName] = useState("");
+    const [error, setError] = useState(null);
 
     const fileType = router.query.type;
     const { file } = useContext(FileContext);
@@ -24,12 +25,6 @@ const ConvertPage = () => {
 
     useEffect(() => {
         if (file && fileData) {
-            const formData = {
-                name: file?.name,
-                type: fileType,
-                data: fileData,
-            };
-
             // http://localhost:3000
             //https://fujiwarachoki-improved-journey-jgqp9j9xxvr25xv6-3000.preview.app.github.dev
 
@@ -38,12 +33,19 @@ const ConvertPage = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    name: file?.name,
+                    type: fileType,
+                    data: fileData,
+                }),
             })
-                .then((res) => res.blob())
-                .then((blob) => {
-                    // Set 
-                    setResultFile(blob);
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.error) {
+                        setError(data.error)
+                    }
+                    // Set the converted file
+                    setResultFile(data.data);
                     setLoading(false);
                 });
         } else {
@@ -65,12 +67,20 @@ const ConvertPage = () => {
                 ) : (
                     <div className="flex flex-col items-center justify-center h-screen" >
                         <h2 className="text-2xl italic mb-3" > Converted <span className="font-bold" > {file?.name.split('.')[0] + '.' + newFileName}</span></h2 >
-                        <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={() => fileDownload(resultFile, file?.name.split('.')[0] + '.' + newFileName)}
-                        >
-                            Download
-                        </button >
+
+                        {
+                            error === null ? (
+                                <button
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    onClick={() => fileDownload(resultFile, file?.name.split('.')[0] + '.' + newFileName)}
+                                >
+                                    Download
+                                </button >
+                            ) : (
+                                <p className="text-red-500" > {error}</p >
+                            )
+                        }
+
                     </div >
                 )
             }

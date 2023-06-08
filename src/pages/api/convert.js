@@ -1,16 +1,10 @@
 const ConvertApi = require('convertapi');
+const { writeFileSync } = require('fs');
 
-const convertFile = async (data, type) => {
-    // Set up ConvertApi client
-    const convertApi = new ConvertApi(process.env.API_KEY);
+const uploadFile = async (fileData, fileName) => {
+    writeFileSync('/tmp/' + fileName, fileData, 'binary');
 
-    // Convert the file
-    const conversion = await convertApi.convert(type, { File: data });
-
-    // Retrieve the converted file
-    const convertedFile = await conversion.file.save();
-
-    return convertedFile;
+    return '/tmp/' + fileName;
 };
 
 const handler = async (req, res) => {
@@ -18,11 +12,16 @@ const handler = async (req, res) => {
         return res.status(405).send('Method not allowed');
     }
 
-    const { name, data, type } = req.body;
+    const { data, name, type } = req.body;
 
     try {
-        // Convert the file to the desired type
-        const convertedFile = await convertFile(data, type);
+        // Upload the file
+        const uploadedFileUrl = await uploadFile(data);
+
+        // Convert the uploaded file
+        const convertApi = new ConvertApi(process.env.API_KEY);
+        const conversion = await convertApi.convert(type, { File: uploadedFileUrl });
+        const convertedFile = await conversion.file.save();
 
         // Create a blob from the converted file
         const blob = new Blob([convertedFile], { type: `image/${type}` });
@@ -34,10 +33,15 @@ const handler = async (req, res) => {
         res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
         res.setHeader('Content-Type', `image/${type}`);
 
-        return res.status(200).send(blob);
+        return res.status(200).send({
+            filename: fileName,
+            data: blob,
+        });
     } catch (error) {
         console.error('File conversion error:', error);
-        return res.status(500).send('File conversion error');
+        return res.status(500).send({
+            error: error.message,
+        });
     }
 };
 
