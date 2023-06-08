@@ -42,7 +42,8 @@ const ConvertPage = () => {
                 .then((res) => res.json())
                 .then((data) => {
                     if (data.error) {
-                        setError(data.error)
+                        setError(data.error);
+                        console.log(data);
                     }
                     // Set the converted file
                     setResultFile(data.data);
