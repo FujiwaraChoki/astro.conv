@@ -15,7 +15,6 @@ const ConvertPage = () => {
   const [loading, setLoading] = useState(true);
   const [resultFile, setResultFile] = useState(null);
   const [newFileName, setNewFileName] = useState("");
-  const [error, setError] = useState(null);
 
   const fileType = router.query.type;
   const { file } = useContext(FileContext);
@@ -52,7 +51,7 @@ const ConvertPage = () => {
         setResultFile(uniqueFilename);
         setError(null);
       } catch (error) {
-        setError("An error occurred while converting the file.");
+        console.log("An error occurred while converting the file.");
       } finally {
         setLoading(false);
       }
@@ -109,15 +108,6 @@ const ConvertPage = () => {
             Your image has been downloaded automatically, if it didn't, click
             this button:
           </p>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            <a
-              href={`/${resultFile}`}
-              download={resultFile}
-              className="text-white"
-            >
-              Download
-            </a>
-          </button>
         </div>
       )}
     </div>
