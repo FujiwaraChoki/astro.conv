@@ -11,6 +11,8 @@
   "dependencies": {
     "autoprefixer": "10.4.14",
     "convertapi": "^1.11.2",
+    "ffmpeg": "^0.0.4",
+    "fs": "^0.0.1-security",
     "js-file-download": "^0.4.12",
     "next": "13.3.1",
     "postcss": "8.4.23",
