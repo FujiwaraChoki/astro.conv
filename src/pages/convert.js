@@ -8,7 +8,7 @@ import FileDataContext from "@/contexts/FileDataContext";
 
 const ConvertPage = () => {
   const ffmpeg = createFFmpeg({
-    corePath: "https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js",
+    corePath: "http://localhost:3000/ffmpeg-core.js",
     log: true,
   });
   const router = useRouter();
@@ -54,10 +54,7 @@ const ConvertPage = () => {
       } catch (error) {
         setError("An error occurred while converting the file.");
       } finally {
-        await ffmpeg.load();
         setLoading(false);
-        ffmpeg.FS("unlink", "input-file");
-        ffmpeg.FS("unlink", `output.${fileType}`);
       }
     };
 
@@ -108,23 +105,19 @@ const ConvertPage = () => {
               {file?.name.split(".")[0] + "." + newFileName}
             </span>
           </h2>
-
-          {error === null ? (
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() => {
-                const uniqueFilename = `${
-                  file?.name.split(".")[0]
-                }-${Date.now()}.${fileType}`;
-
-                fileDownload(blob, uniqueFilename);
-              }}
+          <p className="text-2xl italic mb-3 inline-flex space-x-4">
+            Your image has been downloaded automatically, if it didn't, click
+            this button:
+          </p>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <a
+              href={`/${resultFile}`}
+              download={resultFile}
+              className="text-white"
             >
               Download
-            </button>
-          ) : (
-            <p className="text-red-500">{error}</p>
-          )}
+            </a>
+          </button>
         </div>
       )}
     </div>

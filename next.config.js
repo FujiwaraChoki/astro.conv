@@ -1,11 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  headers: async () => {
-    // SharedArrayBUffer
+  async headers() {
     return [
       {
-        source: "/convert",
+        source: "/",
         headers: [
           {
             key: "Cross-Origin-Embedder-Policy",
