@@ -8,7 +8,7 @@ import FileDataContext from "@/contexts/FileDataContext";
 
 const ConvertPage = () => {
   const ffmpeg = createFFmpeg({
-    corePath: "https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js",
+    corePath: "http://astro-conv.vercel.app/ffmpeg-core.js",
     log: true,
   });
   const router = useRouter();
