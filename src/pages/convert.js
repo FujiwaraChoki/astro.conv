@@ -8,7 +8,7 @@ import FileDataContext from "@/contexts/FileDataContext";
 
 const ConvertPage = () => {
   const ffmpeg = createFFmpeg({
-    corePath: "http://localhost:3000/ffmpeg-core.js",
+    corePath: "https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js",
     log: true,
   });
   const router = useRouter();
