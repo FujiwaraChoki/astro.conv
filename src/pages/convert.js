@@ -105,8 +105,7 @@ const ConvertPage = () => {
             </span>
           </h2>
           <p className="text-2xl italic mb-3 inline-flex space-x-4">
-            Your image has been downloaded automatically, if it didn't, click
-            this button:
+            Your image has been downloaded automatically, try again.
           </p>
         </div>
       )}
