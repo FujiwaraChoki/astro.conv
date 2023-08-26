@@ -89,7 +89,6 @@ const UploadArea = () => {
                     )
                 }
             </div>
-            </div>
         </div >
     );
 };
