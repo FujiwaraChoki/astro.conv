@@ -16,6 +16,7 @@ astro.conv uses the following Frameworks and Libraries:
 * [Next.js](https://nextjs.org/) - React Framework
 * [React-Icons](https://react-icons.github.io/react-icons/) - Icon Library
 * [TailwindCSS](https://tailwindcss.com/) - CSS Framework
+* [FFMPEG](https://github.com/ffmpegwasm/ffmpeg.wasm) - Conversion Library
 
 ## Access
 
