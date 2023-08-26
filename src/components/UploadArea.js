@@ -11,7 +11,6 @@ import { useRouter } from "next/router";
 
 const UploadArea = () => {
     const [resultFileType, setResultFileType] = useState("");
-    const [conversionsLeft, setConversionsLeft] = useState(0);
     const { fileData, setFileData } = useContext(FileDataContext);
     const [open, setOpen] = useState(false);
     const { file, setFile } = useContext(FileContext);
@@ -90,25 +89,6 @@ const UploadArea = () => {
                     )
                 }
             </div>
-            <div className="flex flex-col items-center justify-center mt-6">
-                {conversionsLeft > 0 ? (
-                    <p className="text-lg text-gray-400">
-                        You have {conversionsLeft} conversions left
-                    </p>
-                ) : (
-                    <p className="text-lg text-gray-400">
-                        You have no conversions left.&nbsp;
-                        <Link
-                            href="/pro"
-                            className="transition ease-in-out delay-150 inline-block relative group font-medium transition duration-300 ease-in-out transform hover:translate-x-2"
-                        >
-                            Consider upgrading your account.
-                            <span
-                                className="absolute bottom-0 left-0 w-full h-0.5 bg-purple-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition duration-300 ease-in-out"
-                            ></span>
-                        </Link>
-                    </p>
-                )}
             </div>
         </div >
     );
